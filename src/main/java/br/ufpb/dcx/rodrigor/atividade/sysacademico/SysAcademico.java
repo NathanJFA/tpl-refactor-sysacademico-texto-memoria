@@ -1,19 +1,20 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico;
 
-import br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico.Aluno;
-import br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico.Departamento;
-import br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico.Disciplina;
-import br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico.Turma;
+import br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico.*;
+import br.ufpb.dcx.rodrigor.util.Texto;
 
 public class SysAcademico {
 
     private int tamLinha;
     private int margem = 5;
     private Departamento departamento;
+    private Curso curso;
 
     public SysAcademico(String nomeDepartamento) {
+
         this.tamLinha = nomeDepartamento.length() + 10;
         this.departamento = new Departamento(nomeDepartamento);
+        this.curso = new Curso("001","SI / LCC");
     }
 
     public static void main(String[] args) {
@@ -177,7 +178,8 @@ public class SysAcademico {
         if(departamento.getDisciplina(codigo) != null){
             Texto.printMargem(margem,"Já existe uma disciplina com o código '"+codigo+"'");
         }else {
-            departamento.criarDisciplina(codigo, nome);
+            Disciplina disciplina = new Disciplina(codigo,nome,curso);
+            departamento.cadastrarDisciplina(disciplina);
         }
     }
 

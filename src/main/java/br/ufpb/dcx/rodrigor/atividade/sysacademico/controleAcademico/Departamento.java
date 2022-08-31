@@ -1,4 +1,4 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico;
 
 import java.util.*;
 
@@ -12,12 +12,11 @@ public class Departamento {
         disciplinas = new LinkedHashMap<>();
     }
 
-    public Disciplina criarDisciplina(String codigo, String nome) {
+    public Disciplina cadastrarDisciplina(Disciplina novaDisciplina) {
 //        if(disciplinas.containsKey(codigo)) {
 //            throw new DepartamentoException("Já existe uma disciplina com o código '"+codigo+"'");
 //        }
-        Disciplina novaDisciplina = new Disciplina(codigo,nome);
-        disciplinas.put(codigo,novaDisciplina);
+        disciplinas.put(novaDisciplina.getCodigo(),novaDisciplina);
         return novaDisciplina;
     }
 

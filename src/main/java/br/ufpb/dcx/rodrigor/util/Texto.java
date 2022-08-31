@@ -1,4 +1,4 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos;
+package br.ufpb.dcx.rodrigor.util;
 
 import java.util.Arrays;
 import java.util.Scanner;

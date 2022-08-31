@@ -1,4 +1,4 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico;
 
 public class DepartamentoException extends Exception {
     public DepartamentoException(String msg) {

@@ -1,25 +1,26 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class Disciplina {
 
+
+    private Curso curso;
     private String codigo;
     private String nome;
     private List<Turma> turmas;
 
-    public Disciplina(String codigo, String nome){
+    public Disciplina(String codigo, String nome, Curso curso){
         this.codigo = codigo;
         this.nome = nome;
         this.turmas = new ArrayList<>();
+        this.curso = curso;
     }
 
 
     public Turma criarTurma(){
-        Turma novaTurma = new Turma(this,turmas.size()+1);
+        Turma novaTurma = new Turma(this,1);
         this.turmas.add(novaTurma);
         return novaTurma;
     }

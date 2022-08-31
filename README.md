@@ -6,6 +6,11 @@
 
 # Atividade 
 
-Altere este sistema para que ele gerencie entidades do domínio que você quiser.
+
+Altere o SysAcademico:
+
+1. Crie a funcionalidade "Remover Disciplina"
+2. Crie a funcionalidade "Cadastrar Aluno" em um curso. Os alunos devem ser cadastrados em um `Curso`;
+3. Altere a matrícula de aluno em disciplina, de modo que um aluno só possa ser matriculado numa turma se estiver cadastrado no curso.
 
 

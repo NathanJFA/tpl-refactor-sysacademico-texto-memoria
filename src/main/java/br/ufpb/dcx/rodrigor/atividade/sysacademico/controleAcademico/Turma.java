@@ -1,4 +1,4 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package br.ufpb.dcx.rodrigor.atividade.matricular_alunos.controleAcademico;
+package br.ufpb.dcx.rodrigor.atividade.sysacademico.controleAcademico;
 
 public class Aluno {
 
@@ -12,7 +12,12 @@ public class Aluno {
     }
 
     public String toString(){
-        return this.matricula+"\t"+this.nome;
+        return this.matricula+"\t"+"this.nome";
+    }
+
+
+    public String getMatricula() {
+        return this.matricula;
     }
 
 
