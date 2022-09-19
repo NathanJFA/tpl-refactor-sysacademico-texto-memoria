@@ -21,7 +21,6 @@ public class SysAcademico {
         SysAcademico sys = new SysAcademico("Departamento de Ciências Exatas");
         sys.run();
     }
-
     public void run(){
         printMenuPrincipal();
     }
@@ -29,11 +28,10 @@ public class SysAcademico {
     private void printMenuPrincipal() {
         boolean continua = true;
         while(continua) {
-            String[] opcoes = {"1", "2", "3", "x"};
+            String[] opcoes = {"1", "2", "x"};
             String[] itens = {
                     "Gerenciar Disciplinas",
-                    "Matricular Alunos",
-                    "Listar Alunos",
+                    "Gerenciar Alunos",
                     "Sair"
             };
             String opcao = printMenu(departamento.getNome(), opcoes,itens);
@@ -42,10 +40,7 @@ public class SysAcademico {
                     printMenuDisciplina();
                     break;
                 case "2":
-                    matricularAluno();
-                    break;
-                case "3":
-                    listarAlunos();
+                    printMenuAluno();
                     break;
                 case "x":
                     Texto.printMargem(margem,"Até logo!");
@@ -72,10 +67,11 @@ public class SysAcademico {
     private void printMenuDisciplina(){
         boolean continua = true;
         while(continua) {
-            String[] opcoes = {"1", "2", "3", "x"};
+            String[] opcoes = {"1", "2", "3", "4", "x"};
             String[] itens = {
                     "Cadastrar Disciplina",
                     "Listar Disciplinas",
+                    "Remover Disciplina",
                     "Criar Turma",
                     "Voltar"
             };
@@ -88,6 +84,9 @@ public class SysAcademico {
                     listarDisciplinas();
                     break;
                 case "3":
+                    removerDisciplina();
+                    break;
+                case "4":
                     criarTurma();
                     break;
                 case "x":
@@ -97,9 +96,70 @@ public class SysAcademico {
 
     }
 
+    private void printMenuAluno(){
+        boolean continua = true;
+        while(continua) {
+            String[] opcoes = {"1", "2", "3", "4", "x"};
+            String[] itens = {
+                    "Matricular Aluno",
+                    "Listar Alunos",
+                    "Cadastrar Aluno em um curso",
+                    "Remover Aluno",
+                    "Voltar"
+            };
+            String opcao = printMenu("Gerenciar Alunos", opcoes,itens);
+            switch (opcao){
+                case "1":
+                    matricularAluno();
+                    break;
+                case "2":
+                    listarAlunos();
+                    break;
+                case "3":
+                    cadastrarAluno();
+                    break;
+                case "4":
+                    removerAluno();
+                    break;
+                case "x":
+                    continua = false;
+            }
+        }
+
+    }
+
+    private void removerAluno() {
+        if(curso.getAlunosMatriculados().isEmpty()){
+            Texto.printMargem(margem, "Não tem alunoa cadastrados para remover");
+            return;
+        }
+        Texto.printMargem(margem, " Remoção de aluno ");
+        String matAluno = Texto.readString("Digite a matrícula do aluno:");
+        if(curso.getAlunosMatriculados().containsKey(matAluno)){
+            curso.getAlunosMatriculados().remove(matAluno, curso.getAlunosMatriculados().get(matAluno));
+            for(Disciplina d: departamento.getDisciplinas()) {
+                for (Turma t : d.getTurmas()) {
+                    for (Aluno a : t.getAlunos()) {
+                        if (a.getMatricula() == matAluno) {
+                            t.getAlunos().remove(a);
+                            Texto.printMargem(margem, " Aluno removido com sucesso!!");
+                            return;
+                        }
+                    }
+                }
+            }
+        }else {
+            Texto.printMargem(margem, " Matrícula informada não foi encontrada!! ");
+        }
+    }
+
     private void matricularAluno() {
+        if(curso.getAlunosMatriculados().isEmpty()){
+            Texto.printMargem(margem, "Não existem alunos cadastrados, cadastre o aluno para poder matricular! ");
+            return;
+        }
         if(departamento.getDisciplinas().isEmpty()) {
-            Texto.printMargem(margem, "Não existem disciplinas cadastradas");
+            Texto.printMargem(margem, "Não existem disciplinas cadastradas!");
             return;
         }
         listarDisciplinas();
@@ -119,10 +179,15 @@ public class SysAcademico {
             Texto.printMargem(margem,"Turma Inválida: "+turma);
             return;
         }
-        String nome = Texto.readString("Nome:");
-        String matricula = Texto.readString("Matrícula:");
-        Aluno novoAluno = new Aluno(matricula,nome);
-        turma.matricularAluno(novoAluno);
+
+        String matricula = Texto.readString("Matrícula do aluno a cacdastrar:");
+        Aluno aluno = curso.getAluno(matricula);
+        if(aluno != null){
+            turma.matricularAluno(aluno);
+        }else{
+            Texto.printMargem(margem,"Não foi encontrado nenhum aluno com a matrícula informada! ");
+        }
+
 
     }
 
@@ -133,7 +198,7 @@ public class SysAcademico {
             return;
         }
         listarDisciplinas();
-        String codDisciplina = Texto.readString("Digite o código da disciplina");
+        String codDisciplina = Texto.readString("Digite o código da disciplina: ");
         if(!departamento.getCodigos().contains(codDisciplina)){
             Texto.printMargem(margem,"Disciplina inexistente '"+codDisciplina+"'");
             return;
@@ -143,6 +208,10 @@ public class SysAcademico {
     }
 
     private void listarDisciplinas() {
+        if(departamento.getDisciplinas().isEmpty()){
+            Texto.printMargem(margem, "Não existem disciplinas cadastradas! ");
+            return;
+        }
         Texto.printCabecalho("Disciplinas cadastradas", tamLinha);
         for(Disciplina disciplina: departamento.getDisciplinas()){
             Texto.printMargem(margem,disciplina.toString());
@@ -151,10 +220,15 @@ public class SysAcademico {
     }
 
     private void listarAlunos() {
-        if (departamento.getDisciplinas().isEmpty()){
-            Texto.printMargem(margem, "Não há disciplinas cadastradas");
+        if (curso.getAlunosMatriculados().isEmpty()){
+            Texto.printMargem(margem, "Não há alunos cadastrados!! ");
             return;
         }
+        Texto.printCabecalho("Alunos matriculados:", tamLinha);
+        for(Aluno a: curso.getAlunosMatriculados().values()){
+            Texto.printMargem(margem, "Aluno: " + a.toString());
+        }
+        Texto.printLinhasBranco(1);
         Texto.printCabecalho("Alunos matriculados, por disciplina", tamLinha);
         int espaco = 4;
         for(Disciplina disciplina:departamento.getDisciplinas()){
@@ -180,6 +254,49 @@ public class SysAcademico {
         }else {
             Disciplina disciplina = new Disciplina(codigo,nome,curso);
             departamento.cadastrarDisciplina(disciplina);
+        }
+    }
+
+    private void removerDisciplina() {
+        if(departamento.getDisciplinas().isEmpty()){
+            Texto.printMargem(margem, "Não existem disciplinas cadastradas! ");
+            return;
+        }
+        listarDisciplinas();
+        Texto.printLine(tamLinha);
+        String codigo = Texto.readString("Código da disciplina que deseja remover:");
+        if(departamento.getDisciplina(codigo) == null){
+            Texto.printMargem(margem,"Não existe uma disciplina com o código '"+codigo+"'");
+        }else {
+            departamento.removerDisciplina(codigo);
+            for(Disciplina disciplina:departamento.getDisciplinas()){
+                Texto.printMargem(margem,disciplina.toString());
+                Texto.printLine(tamLinha);
+                for(Turma turma: disciplina.getTurmas()){
+                    Texto.printMargem(margem+4,"Turma "+turma.getNumeroTurma());
+                    Texto.printLine(tamLinha);
+                    for(Aluno aluno: turma.getAlunos()){
+                        Texto.printMargem(margem+4+4,aluno.toString());
+                    }
+                }
+            }
+        }
+    }
+
+    private void cadastrarAluno() {
+        String matricula = Texto.readString("Matrícula:");
+
+        for (Disciplina d: departamento.getDisciplinas()){
+            for (Turma t: d.getTurmas()){
+                for (Aluno a: t.getAlunos()){
+                    if (a.getMatricula().equals(matricula)){
+                        curso.cadastrarAluno(a);
+                        Texto.printMargem(margem,"Aluno cadastrado com sucesso!");
+                    }else{
+                        Texto.printMargem(margem,"Matrícula não encontrada!");
+                    }
+                }
+            }
         }
     }
 
